@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "320243536504",
+    "project_id": "instaclon-1a408",
+    "storage_bucket": "instaclon-1a408.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320243536504:android:a04da9ebf6ca1bbe5f138d",
+        "android_client_info": {
+          "package_name": "com.ahmetkarakaya.instagramclon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320243536504-4p9f6l3j6oba1mi60sqrbaldrnb5r9ua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALPzwiomfZxmf4KaC1TTY1p0JHoEtVgqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320243536504-4p9f6l3j6oba1mi60sqrbaldrnb5r9ua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
