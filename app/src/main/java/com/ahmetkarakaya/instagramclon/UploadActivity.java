@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -21,14 +22,28 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ahmetkarakaya.instagramclon.databinding.ActivityUploadBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.UUID;
 
 public class UploadActivity extends AppCompatActivity {
+    private FirebaseAuth auth;
+    private FirebaseStorage firebaseStorage;
+    private FirebaseFirestore firebaseFirestore;
+    private StorageReference storageReference;
+
     ActivityResultLauncher<Intent> activityResultLauncher;
     ActivityResultLauncher<String> permissionLauncher;
     Uri imageData;
     private ActivityUploadBinding binding;
-    Bitmap selectedBitmap;
+    //Bitmap selectedBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +52,35 @@ public class UploadActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        auth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        storageReference = firebaseStorage.getReference();
+
         registerLauncher();
     }
 
     public void share(View view){
+
+        if (imageData != null){
+            //universal unique id
+
+            UUID uuid = UUID.randomUUID();
+            String imageName = "images/"+ uuid + ".jpg";
+
+            storageReference.child(imageName).putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //Download url
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
     }
 
