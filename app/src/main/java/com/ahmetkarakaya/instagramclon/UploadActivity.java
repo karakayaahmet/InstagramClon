@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ahmetkarakaya.instagramclon.databinding.ActivityUploadBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,6 +36,8 @@ public class UploadActivity extends AppCompatActivity {
         binding = ActivityUploadBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        registerLauncher();
     }
 
     public void share(View view){
@@ -44,19 +47,22 @@ public class UploadActivity extends AppCompatActivity {
     public void select_image(View view){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
-                Snackbar.make(view, "Permission needen for gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission", new View.OnClickListener() {
+                Snackbar.make(view, "Permission needed for gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give Permission", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //ask permission
+                        permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
                     }
                 }).show();
             }
             else{
                 //ask permission
+                permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
         }
         else{
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            activityResultLauncher.launch(intent);
         }
     }
 
@@ -87,6 +93,20 @@ public class UploadActivity extends AppCompatActivity {
                             e.printStackTrace();
                         } */
                     }
+                }
+            }
+        });
+
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if (result){
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    activityResultLauncher.launch(intent);
+                }
+
+                else{
+                    Toast.makeText(UploadActivity.this, "Permission Needed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
